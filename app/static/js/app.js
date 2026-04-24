@@ -59,10 +59,6 @@ function renderStats() {
     Object.values(dist).forEach(info => activeStudents.push(...info.students));
     const boundaryStudents = activeStudents.filter(s => s.secondary_type);
 
-    const avgConf = activeStudents.length
-        ? Math.round(activeStudents.reduce((sum, s) => sum + s.confidence, 0) / activeStudents.length * 100)
-        : 0;
-
     document.getElementById('statsRow').innerHTML = `
         <div class="stat-card stat-card-clickable" id="statTotal">
             <div class="stat-value">${classData.total_students}</div>
@@ -75,10 +71,6 @@ function renderStats() {
         <div class="stat-card stat-card-clickable" id="statBoundary">
             <div class="stat-value">${boundaryCount}</div>
             <div class="stat-label">Boundary Profiles</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">${avgConf}%</div>
-            <div class="stat-label">Avg Confidence</div>
         </div>
     `;
 
@@ -162,7 +154,7 @@ function renderTypeGrid() {
                 </div>
                 <div class="type-students">
                     ${info ? info.students.map(s =>
-                        `<span class="type-student-chip" data-student="${s.id}" style="border-color:${color}40">${s.name} <span class="chip-confidence">${Math.round(s.confidence * 100)}%</span></span>`
+                        `<span class="type-student-chip" data-student="${s.id}" style="border-color:${color}40">${s.name}</span>`
                     ).join('') : '<span style="color:var(--text-muted);font-size:11px">No students</span>'}
                 </div>
             </div>
@@ -603,10 +595,7 @@ function renderStudentTable(students) {
                 <td class="student-score-cell">${s.depth.toFixed(1)}</td>
                 <td class="student-score-cell">${s.structure.toFixed(1)}</td>
                 <td class="student-score-cell">${s.evidence.toFixed(1)}</td>
-                <td>
-                    <span class="student-confidence-bar"><span class="student-confidence-fill" style="width:${confPct}%;background:${s.color}"></span></span>
-                    <span style="font-size:12px;color:var(--text-muted)">${confPct}%</span>
-                </td>
+                <td class="student-score-cell">${confPct}%</td>
                 <td><div class="student-history-dots">${historyDots}</div></td>
             </tr>
         `;
@@ -623,17 +612,7 @@ function renderStudentTable(students) {
 function renderGuide() {
     if (!classData || !classData.type_meta) return;
 
-    // Hero characters — show only 4 main archetypes for a cleaner look
-    const heroChars = document.getElementById('guideHeroCharacters');
-    if (heroChars) {
-        const heroTypes = ['architect', 'explorer', 'reporter', 'wanderer'];
-        heroChars.innerHTML = heroTypes.map(t =>
-            `<div class="guide-hero-char-wrapper">
-                <img src="/static/img/${t}.png" class="guide-hero-char" alt="${classData.type_meta[t].label}" title="${classData.type_meta[t].label}">
-                <span class="guide-hero-char-label" style="color:var(--${t})">${classData.type_meta[t].label}</span>
-            </div>`
-        ).join('');
-    }
+    // Hero characters removed for cleaner look
 
     // Types grid
     const grid = document.getElementById('guideTypesGrid');

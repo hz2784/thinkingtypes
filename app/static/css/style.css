@@ -20,9 +20,9 @@
     --collector: #d4a017;
     --improviser: #e87d2f;
     --wanderer: #9b7cc4;
-    --warning: #f59e0b;
-    --positive: #10b981;
-    --info: #6366f1;
+    --warning: #e85d26;
+    --positive: #2a7ab5;
+    --info: #f39c5a;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -58,7 +58,7 @@ body {
 .header-logo {
     width: 32px;
     height: 32px;
-    background: linear-gradient(135deg, var(--explorer), var(--architect));
+    background: #f37321;
     border-radius: var(--radius-xs);
     display: flex;
     align-items: center;
@@ -71,7 +71,7 @@ body {
 .header-title {
     font-size: 18px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #f37321;
 }
 
 .header-subtitle {
@@ -112,8 +112,9 @@ body {
 .tab:hover { color: var(--text-primary); }
 .tab.active {
     background: var(--white);
-    color: var(--text-primary);
+    color: #f37321;
     box-shadow: var(--shadow-sm);
+    font-weight: 600;
 }
 
 /* Layout */
@@ -714,9 +715,9 @@ body {
     letter-spacing: 0.3px;
 }
 
-.alert-badge.warning { background: #fef3c7; color: #92400e; }
-.alert-badge.positive { background: #d1fae5; color: #065f46; }
-.alert-badge.stable { background: #e0e7ff; color: #3730a3; }
+.alert-badge.warning { background: #fde8e0; color: #c0441a; }
+.alert-badge.positive { background: #dceef8; color: #1b5a87; }
+.alert-badge.stable { background: #fef0e2; color: #c47a2a; }
 
 .alert-message {
     font-size: 13px;
@@ -853,8 +854,8 @@ body {
 
 /* Teacher Tip */
 .teacher-tip {
-    background: #f0f7ff;
-    border: 1px solid #d0e3f7;
+    background: #fef0e2;
+    border: 1px solid #f9c89b;
     border-radius: var(--radius-sm);
     padding: 14px 16px;
 }
@@ -864,7 +865,7 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #3b82f6;
+    color: #f37321;
     margin-bottom: 6px;
 }
 
@@ -906,13 +907,10 @@ body {
 
 /* Guide Tab v2 */
 .guide-hero-v2 {
-    background: linear-gradient(135deg, #1a1a2e 0%, #2d3561 50%, #1a8a8a 100%);
+    background: #f37321;
     border-radius: var(--radius);
     padding: 40px 36px;
     margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     overflow: hidden;
     position: relative;
 }
@@ -951,41 +949,6 @@ body {
     max-width: 480px;
 }
 
-.guide-hero-characters {
-    display: flex;
-    gap: 20px;
-    position: relative;
-    z-index: 1;
-    flex-shrink: 0;
-}
-
-.guide-hero-char-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.guide-hero-char {
-    width: 88px;
-    height: 88px;
-    object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
-    opacity: 0.95;
-    transition: transform 0.2s, opacity 0.2s;
-}
-
-.guide-hero-char:hover {
-    transform: scale(1.12) translateY(-4px);
-    opacity: 1;
-}
-
-.guide-hero-char-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    opacity: 0.85;
-}
 
 /* Concept cards row */
 .guide-card-row {
@@ -1011,13 +974,13 @@ body {
     width: 40px;
     height: 40px;
     border-radius: 10px;
-    background: var(--bg);
+    background: #fef0e2;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #f37321;
     margin-bottom: 14px;
 }
 
@@ -1181,10 +1144,10 @@ body {
     display: inline-block;
     padding: 3px 10px;
     border-radius: var(--radius-xs);
-    background: var(--bg);
+    background: #fef0e2;
     font-size: 12px;
     font-weight: 600;
-    color: var(--text-primary);
+    color: #f37321;
     margin-bottom: 8px;
 }
 
@@ -1239,8 +1202,8 @@ body {
 }
 
 .guide-callout {
-    background: #f0f7ff;
-    border: 1px solid #d0e3f7;
+    background: var(--bg);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 14px 16px;
     font-size: 13px;
@@ -1294,10 +1257,10 @@ body {
     display: inline-block;
     padding: 2px 8px;
     border-radius: var(--radius-xs);
-    background: var(--bg);
+    background: #fef0e2;
     font-size: 11px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: #f37321;
     text-transform: uppercase;
     letter-spacing: 0.3px;
     margin-bottom: 10px;
