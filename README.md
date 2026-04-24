@@ -13,7 +13,7 @@ An end-to-end, research-grade pipeline that transforms student work into actiona
 ```
 Eliciting Rich          Capturing         Analyzing/          Making            Useful Reports
 Student Data  ───────>  that Data  ────>  Interpreting  ───>  Rigorous   ────>  and
-(Student Thinking)                        the Data            Claims            Recommendations
+                                          the Data            Claims            Recommendations
 ```
 
 ## The Problem
