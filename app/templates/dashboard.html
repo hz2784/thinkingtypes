@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thinking Types — Amplify</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-brand">
+        <div class="header-logo">TT</div>
+        <span class="header-title">Thinking Types</span>
+        <span class="header-subtitle">Mr. Thompson's Class &middot; Grade 6</span>
+    </div>
+    <div class="header-right">
+        <div class="tabs" id="mainTabs">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="students">Students</button>
+            <button class="tab" data-tab="grouping">Grouping</button>
+            <button class="tab" data-tab="alerts">Alerts</button>
+            <button class="tab" data-tab="guide">Guide</button>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Overview Tab -->
+    <div id="tab-overview" class="tab-content">
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Class Overview</div>
+                    <div class="section-subtitle">Thinking type distribution based on student work</div>
+                </div>
+            </div>
+            <div class="stats-row" id="statsRow"></div>
+            <div class="type-grid" id="typeGrid"></div>
+        </div>
+    </div>
+
+    <!-- Students Tab -->
+    <div id="tab-students" class="tab-content" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">All Students</div>
+                    <div class="section-subtitle">Click any student to view their thinking profile</div>
+                </div>
+                <input type="text" id="studentSearch" class="student-search" placeholder="Search students...">
+            </div>
+            <div class="student-table-wrapper">
+                <table class="student-table" id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Depth</th>
+                            <th>Structure</th>
+                            <th>Evidence</th>
+                            <th>Confidence</th>
+                            <th>History</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grouping Tab -->
+    <div id="tab-grouping" class="tab-content" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Suggested Peer Review Pairs</div>
+                    <div class="section-subtitle">Paired by complementary thinking styles for maximum learning</div>
+                </div>
+            </div>
+            <div id="pairsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Alerts Tab -->
+    <div id="tab-alerts" class="tab-content" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Type Shift Alerts</div>
+                    <div class="section-subtitle">Notable changes in thinking patterns across units</div>
+                </div>
+            </div>
+            <div id="alertsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Guide Tab -->
+    <div id="tab-guide" class="tab-content" style="display:none">
+
+        <!-- Hero -->
+        <div class="guide-hero-v2">
+            <div class="guide-hero-inner">
+                <div class="guide-hero-badge">Teacher Guide</div>
+                <h1 class="guide-hero-title">How Thinking Types Works</h1>
+                <p class="guide-hero-desc">Understanding thinking styles (not ability levels) and using them to support every learner.</p>
+            </div>
+            <div class="guide-hero-characters" id="guideHeroCharacters"></div>
+        </div>
+
+        <!-- Quick concept -->
+        <div class="guide-card-row">
+            <div class="guide-concept-card">
+                <div class="guide-concept-icon">?</div>
+                <h3>What is this?</h3>
+                <p>Thinking Types looks at your students' reading and writing data (mCLASS assessments and Amplify ELA essays) and identifies <strong>how each student thinks</strong>, not just how well they perform.</p>
+            </div>
+            <div class="guide-concept-card">
+                <div class="guide-concept-icon">!</div>
+                <h3>Key principle</h3>
+                <p>No type is better or worse. Each has genuine strengths and growth areas. A Reporter's factual precision is as valuable as an Explorer's creativity.</p>
+            </div>
+            <div class="guide-concept-card">
+                <div class="guide-concept-icon">~</div>
+                <h3>Not a score</h3>
+                <p>Instead of "Inferential Reasoning: 4/10," the system describes a thinking <em>style</em>: "Maria is an Explorer. She makes creative connections but could use help organizing them."</p>
+            </div>
+        </div>
+
+        <!-- Three Dimensions -->
+        <div class="guide-block">
+            <div class="guide-block-header">
+                <h2>The Three Dimensions</h2>
+                <p>Every student is measured along three axes, each on a 0-10 scale</p>
+            </div>
+            <div class="guide-dim-row">
+                <div class="guide-dim-v2">
+                    <div class="guide-dim-gradient" style="background:linear-gradient(90deg, var(--reporter), var(--architect))"></div>
+                    <div class="guide-dim-body">
+                        <div class="guide-dim-poles">
+                            <span>Surface</span>
+                            <span class="guide-dim-label">Depth</span>
+                            <span>Deep</span>
+                        </div>
+                        <p>How deeply does this student engage with material? Do they restate facts, or connect ideas and transfer them to new contexts?</p>
+                    </div>
+                </div>
+                <div class="guide-dim-v2">
+                    <div class="guide-dim-gradient" style="background:linear-gradient(90deg, var(--advocate), var(--detective))"></div>
+                    <div class="guide-dim-body">
+                        <div class="guide-dim-poles">
+                            <span>Systematic</span>
+                            <span class="guide-dim-label">Structure</span>
+                            <span>Exploratory</span>
+                        </div>
+                        <p>How does this student organize their thinking? Do they follow a clear plan, or let ideas emerge as they go?</p>
+                    </div>
+                </div>
+                <div class="guide-dim-v2">
+                    <div class="guide-dim-gradient" style="background:linear-gradient(90deg, var(--improviser), var(--collector))"></div>
+                    <div class="guide-dim-body">
+                        <div class="guide-dim-poles">
+                            <span>Convergent</span>
+                            <span class="guide-dim-label">Evidence</span>
+                            <span>Divergent</span>
+                        </div>
+                        <p>How does this student handle evidence? Do they focus on one strong position, or explore multiple angles?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The 8 Types -->
+        <div class="guide-block">
+            <div class="guide-block-header">
+                <h2>The 8 Types</h2>
+                <p>Three dimensions with two sides each create 8 thinking types. Students in the boundary zone (4.0-6.0) may show traits of two types.</p>
+            </div>
+            <div class="guide-types-grid-v2" id="guideTypesGrid"></div>
+        </div>
+
+        <!-- How to Use -->
+        <div class="guide-block">
+            <div class="guide-block-header">
+                <h2>How to Use This Dashboard</h2>
+                <p>Each tab serves a different purpose in supporting your students</p>
+            </div>
+            <div class="guide-use-grid">
+                <div class="guide-use-card">
+                    <div class="guide-use-tab-badge">Overview</div>
+                    <p>See how your class breaks down across the 8 types. Click any type card to learn more. Click a student name to see their full profile: dimension scores, strengths, growth areas, and type history.</p>
+                </div>
+                <div class="guide-use-card">
+                    <div class="guide-use-tab-badge">Students</div>
+                    <p>Browse all students in one table. Search by name or type. Each row shows scores, confidence, and type history at a glance. Click any row to open the full profile.</p>
+                </div>
+                <div class="guide-use-card">
+                    <div class="guide-use-tab-badge">Grouping</div>
+                    <p>Get suggested peer review pairs based on complementary thinking styles. The system pairs <strong>opposite types</strong> so each student is exposed to what they most need to develop.</p>
+                </div>
+                <div class="guide-use-card">
+                    <div class="guide-use-tab-badge">Alerts</div>
+                    <p>Flags three patterns: <strong>depth decrease</strong> (may need support), <strong>stable 3+ units</strong> (try a stretch activity), or <strong>positive growth</strong>. These are conversation starters, not diagnoses.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Growth + Student Feedback side by side -->
+        <div class="guide-two-col">
+            <div class="guide-block" style="flex:1">
+                <div class="guide-block-header">
+                    <h2>Growth Is Multi-Directional</h2>
+                    <p>There is no single "best" type</p>
+                </div>
+                <div class="guide-growth-v2">
+                    <div class="guide-growth-item">
+                        <span class="guide-growth-from" style="background:var(--reporter)">Reporter</span>
+                        <span class="guide-growth-arrow">&rarr;</span>
+                        <span class="guide-growth-to" style="background:var(--architect)">Architect</span>
+                        <span class="guide-growth-why">Add depth to organized facts</span>
+                    </div>
+                    <div class="guide-growth-item">
+                        <span class="guide-growth-from" style="background:var(--reporter)">Reporter</span>
+                        <span class="guide-growth-arrow">&rarr;</span>
+                        <span class="guide-growth-to" style="background:var(--collector)">Collector</span>
+                        <span class="guide-growth-why">Broaden the evidence base</span>
+                    </div>
+                    <div class="guide-growth-item">
+                        <span class="guide-growth-from" style="background:var(--explorer)">Explorer</span>
+                        <span class="guide-growth-arrow">&rarr;</span>
+                        <span class="guide-growth-to" style="background:var(--detective)">Detective</span>
+                        <span class="guide-growth-why">Add structure to creativity</span>
+                    </div>
+                    <div class="guide-growth-item">
+                        <span class="guide-growth-from" style="background:var(--architect)">Architect</span>
+                        <span class="guide-growth-arrow">&rarr;</span>
+                        <span class="guide-growth-to" style="background:var(--detective)">Detective</span>
+                        <span class="guide-growth-why">Open up to multiple perspectives</span>
+                    </div>
+                    <div class="guide-growth-item">
+                        <span class="guide-growth-from" style="background:var(--wanderer)">Wanderer</span>
+                        <span class="guide-growth-arrow">&rarr;</span>
+                        <span class="guide-growth-to" style="background:var(--improviser)">Improviser</span>
+                        <span class="guide-growth-why">Learn to commit to a position</span>
+                    </div>
+                </div>
+                <div class="guide-callout" style="margin-top:16px">
+                    <strong>You decide the direction.</strong> The system shows where a student is. You know where they need to go. Pedagogical judgment stays with the teacher.
+                </div>
+            </div>
+            <div class="guide-block" style="flex:1">
+                <div class="guide-block-header">
+                    <h2>What Students See</h2>
+                    <p>Students never see their type label</p>
+                </div>
+                <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;line-height:1.6">The system uses each student's type to personalize feedback:</p>
+                <div class="guide-feedback-v2">
+                    <div class="guide-feedback-item" style="border-left-color:var(--reporter)">
+                        <div class="guide-feedback-type" style="color:var(--reporter)">Reporter</div>
+                        <div class="guide-feedback-text">"You summarized the key facts clearly. Now try adding a sentence about <em>why</em> this matters."</div>
+                    </div>
+                    <div class="guide-feedback-item" style="border-left-color:var(--detective)">
+                        <div class="guide-feedback-type" style="color:var(--detective)">Detective</div>
+                        <div class="guide-feedback-text">"You've examined this from many angles. Now: what's <em>your</em> conclusion? Take a stand."</div>
+                    </div>
+                    <div class="guide-feedback-item" style="border-left-color:var(--wanderer)">
+                        <div class="guide-feedback-type" style="color:var(--wanderer)">Wanderer</div>
+                        <div class="guide-feedback-text">"You raised several interesting ideas. Which one matters most to you? Try building your next draft around just that one."</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Sources -->
+        <div class="guide-block">
+            <div class="guide-block-header">
+                <h2>Where Does the Data Come From?</h2>
+                <p>No new assessments needed. Thinking Types extracts signals from data Amplify already collects</p>
+            </div>
+            <div class="guide-sources-row">
+                <div class="guide-source-card">
+                    <div class="guide-source-badge">Reading</div>
+                    <h4>mCLASS / DIBELS 8</h4>
+                    <p>Oral Reading Fluency (pace, accuracy, self-corrections) and Maze (literal vs. inferential comprehension, answer changes). Collected 3x per year.</p>
+                </div>
+                <div class="guide-source-card">
+                    <div class="guide-source-badge">Writing</div>
+                    <h4>Amplify ELA Writing</h4>
+                    <p>AWE scores (Focus, Evidence, Elaboration), essay text analysis (reasoning chains, evidence use, structure), and revision history. Collected continuously.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- List Modal (for stat cards) -->
+<div class="modal-overlay" id="listModal">
+    <div class="modal" style="width:560px">
+        <div class="modal-header">
+            <div style="font-size:18px;font-weight:600" id="listModalTitle"></div>
+            <button class="modal-close" onclick="document.getElementById('listModal').classList.remove('visible')">&times;</button>
+        </div>
+        <div class="modal-body" id="listModalBody"></div>
+    </div>
+</div>
+
+<!-- Type Detail Modal -->
+<div class="modal-overlay" id="typeModal">
+    <div class="modal" style="width:720px">
+        <div class="modal-header">
+            <div id="typeModalHeader"></div>
+            <button class="modal-close" onclick="document.getElementById('typeModal').classList.remove('visible')">&times;</button>
+        </div>
+        <div class="modal-body" id="typeModalBody"></div>
+    </div>
+</div>
+
+<!-- Student Detail Modal -->
+<div class="modal-overlay" id="studentModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <div style="font-size:18px;font-weight:600" id="modalStudentName"></div>
+                <div style="font-size:13px;color:var(--text-secondary);margin-top:2px" id="modalStudentMeta"></div>
+            </div>
+            <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
