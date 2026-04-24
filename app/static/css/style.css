@@ -260,6 +260,12 @@ body {
     box-shadow: var(--shadow-sm);
 }
 
+.chip-confidence {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 2px;
+}
+
 /* Student Detail Modal */
 .modal-overlay {
     position: fixed;
@@ -947,24 +953,38 @@ body {
 
 .guide-hero-characters {
     display: flex;
-    gap: 4px;
+    gap: 20px;
     position: relative;
     z-index: 1;
     flex-shrink: 0;
 }
 
+.guide-hero-char-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
 .guide-hero-char {
-    width: 56px;
-    height: 56px;
+    width: 88px;
+    height: 88px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
-    opacity: 0.9;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
+    opacity: 0.95;
     transition: transform 0.2s, opacity 0.2s;
 }
 
 .guide-hero-char:hover {
-    transform: scale(1.15) translateY(-4px);
+    transform: scale(1.12) translateY(-4px);
     opacity: 1;
+}
+
+.guide-hero-char-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    opacity: 0.85;
 }
 
 /* Concept cards row */
