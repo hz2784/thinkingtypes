@@ -1981,8 +1981,8 @@ function openTypeModal(type) {
 
     // Teacher tip
     html += `
-        <div class="teacher-tip" style="margin-top:16px">
-            <div class="teacher-tip-header">Teacher Tip</div>
+        <div class="teacher-tip" style="margin-top:16px;background:${color}10;border-color:${color}30">
+            <div class="teacher-tip-header" style="color:${color}">Teacher Tip</div>
             <div class="teacher-tip-body">${meta.teacher_tip}</div>
         </div>
     `;
@@ -2205,7 +2205,7 @@ async function loadGrouping() {
         featured.forEach(pair => {
             html += `
                 <div class="pair-card">
-                    <img src="${imgSrc("pair_"+pair.imgKey)}" class="pair-illustration" alt="pair">
+                    <img src="${imgSrc('pair_'+pair.imgKey)}" class="pair-illustration" alt="pair">
                     <div class="pair-students">
                         <div class="pair-student">
                             <img src="${imgSrc(pair.student_a.type)}" class="pair-student-avatar" alt="">

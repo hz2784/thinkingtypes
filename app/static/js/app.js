@@ -219,8 +219,8 @@ function openTypeModal(type) {
 
     // Teacher tip
     html += `
-        <div class="teacher-tip" style="margin-top:16px">
-            <div class="teacher-tip-header">Teacher Tip</div>
+        <div class="teacher-tip" style="margin-top:16px;background:${color}10;border-color:${color}30">
+            <div class="teacher-tip-header" style="color:${color}">Teacher Tip</div>
             <div class="teacher-tip-body">${meta.teacher_tip}</div>
         </div>
     `;
