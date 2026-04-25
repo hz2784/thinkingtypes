@@ -119,6 +119,29 @@ def init_db():
             evidence_explanation_sentences INTEGER DEFAULT 0
         );
 
+        CREATE TABLE IF NOT EXISTS knowledge_nodes (
+            node_id TEXT PRIMARY KEY,
+            label TEXT NOT NULL,
+            domain TEXT NOT NULL,
+            grade_level INTEGER
+        );
+
+        CREATE TABLE IF NOT EXISTS student_knowledge (
+            student_id TEXT NOT NULL REFERENCES students(student_id),
+            node_id TEXT NOT NULL REFERENCES knowledge_nodes(node_id),
+            mastery_level REAL NOT NULL,
+            evidence_source TEXT,
+            updated_at TEXT NOT NULL,
+            PRIMARY KEY (student_id, node_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS knowledge_edges (
+            parent_id TEXT NOT NULL REFERENCES knowledge_nodes(node_id),
+            child_id TEXT NOT NULL REFERENCES knowledge_nodes(node_id),
+            relation TEXT NOT NULL,
+            PRIMARY KEY (parent_id, child_id)
+        );
+
         CREATE TABLE IF NOT EXISTS thinking_profiles (
             profile_id TEXT PRIMARY KEY,
             student_id TEXT NOT NULL REFERENCES students(student_id),

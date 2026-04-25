@@ -1411,6 +1411,368 @@ body {
     .stats-row { flex-direction: column; }
 }
 
+/* Knowledge Graph */
+.kg-tree {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.kg-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.kg-col-header {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+    padding: 0 0 10px;
+    margin-bottom: 4px;
+    border-bottom: 2px solid var(--border);
+}
+
+.kg-level {
+    position: relative;
+    padding: 8px 0;
+}
+
+.kg-level::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-light);
+    z-index: 0;
+}
+
+.kg-level:last-child::before {
+    bottom: 50%;
+}
+
+.kg-level:first-child::before {
+    top: 50%;
+}
+
+.kg-level-cards {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+}
+
+.kg-skill-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    width: 100%;
+    max-width: 200px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+}
+
+.kg-skill-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.kg-skill-card.active {
+    border-color: var(--text-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.kg-skill-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.kg-skill-bar-track {
+    height: 6px;
+    background: var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.kg-skill-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.kg-skill-pct {
+    font-size: 11px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.kg-skill-grade {
+    font-size: 10px;
+    color: var(--text-muted);
+    float: right;
+    margin-top: 1px;
+}
+
+.kg-feeds-into {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0 4px;
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
+.kg-feeds-arrow {
+    font-size: 12px;
+}
+
+.kg-legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.kg-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.kg-legend-gradient {
+    width: 80px;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, hsl(25, 90%, 85%), hsl(25, 90%, 45%));
+}
+
+.kg-node-detail {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-top: 16px;
+}
+
+.kg-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+}
+
+.kg-detail-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.kg-detail-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.kg-detail-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.kg-detail-bar-name {
+    width: 140px;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+.kg-detail-bar-name:hover {
+    text-decoration: underline;
+}
+
+.kg-detail-bar-track {
+    flex: 1;
+    height: 8px;
+    background: var(--border-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.kg-detail-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+}
+
+.kg-detail-bar-value {
+    width: 40px;
+    text-align: right;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+
+.kg-prereq-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-light);
+}
+
+.kg-prereq-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.kg-prereq-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.kg-prereq-chip {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-secondary);
+}
+
+/* Knowledge by Type */
+.kg-type-compare {
+    margin-top: 8px;
+}
+
+.kg-type-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.kg-type-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 99px;
+    border: 2px solid var(--border);
+    background: var(--white);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+}
+
+.kg-type-toggle:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.kg-type-toggle.active {
+    color: var(--white);
+}
+
+.kg-type-toggle img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.kg-compare-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.kg-compare-table th {
+    text-align: left;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+}
+
+.kg-compare-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.kg-compare-table tbody tr:hover {
+    background: var(--bg);
+}
+
+.kg-compare-skill-name {
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+}
+
+.kg-compare-domain {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.kg-compare-cell {
+    min-width: 80px;
+}
+
+.kg-compare-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.kg-compare-bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--border-light);
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 40px;
+}
+
+.kg-compare-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+}
+
+.kg-compare-bar-value {
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+}
+
 /* Empty states */
 .empty-state {
     text-align: center;

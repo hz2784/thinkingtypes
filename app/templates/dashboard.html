@@ -20,6 +20,7 @@
             <button class="tab" data-tab="students">Students</button>
             <button class="tab" data-tab="grouping">Grouping</button>
             <button class="tab" data-tab="alerts">Alerts</button>
+            <button class="tab" data-tab="knowledge">Knowledge</button>
             <button class="tab" data-tab="guide">Guide</button>
         </div>
     </div>
@@ -92,6 +93,37 @@
                 </div>
             </div>
             <div id="alertsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Knowledge Tab -->
+    <div id="tab-knowledge" class="tab-content" style="display:none">
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <div class="section-title">Knowledge Graph</div>
+                    <div class="section-subtitle">Skill mastery across the class — click any skill to see student details</div>
+                </div>
+                <div class="kg-legend">
+                    <span class="kg-legend-item" style="font-size:11px;color:var(--text-muted)">Mastery</span>
+                    <span class="kg-legend-bar"></span>
+                    <span class="kg-legend-item" style="font-size:10px;color:var(--text-muted)">Low</span>
+                    <span class="kg-legend-gradient"></span>
+                    <span class="kg-legend-item" style="font-size:10px;color:var(--text-muted)">High</span>
+                </div>
+            </div>
+            <div class="kg-tree" id="knowledgeTree"></div>
+            <div class="kg-type-compare" id="kgTypeCompare">
+                <div class="section-header" style="margin-top:24px">
+                    <div>
+                        <div class="section-title">Skills by Thinking Type</div>
+                        <div class="section-subtitle">Compare average skill mastery across different thinking types</div>
+                    </div>
+                </div>
+                <div class="kg-type-filters" id="kgTypeFilters"></div>
+                <div id="kgTypeChart"></div>
+            </div>
+            <div id="kgNodeDetail" class="kg-node-detail" style="display:none"></div>
         </div>
     </div>
 

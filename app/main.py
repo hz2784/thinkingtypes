@@ -176,3 +176,128 @@ async def list_units():
     units = conn.execute("SELECT * FROM units ORDER BY sequence").fetchall()
     conn.close()
     return {"units": [dict(u) for u in units]}
+
+
+@app.get("/api/knowledge-graph")
+async def knowledge_graph():
+    conn = get_db()
+    nodes = conn.execute("SELECT * FROM knowledge_nodes").fetchall()
+    edges = conn.execute("SELECT * FROM knowledge_edges").fetchall()
+    mastery = conn.execute("""
+        SELECT node_id,
+               AVG(mastery_level) as avg_mastery,
+               MIN(mastery_level) as min_mastery,
+               MAX(mastery_level) as max_mastery,
+               COUNT(*) as student_count
+        FROM student_knowledge
+        GROUP BY node_id
+    """).fetchall()
+    all_sk = conn.execute("SELECT * FROM student_knowledge").fetchall()
+    conn.close()
+
+    profiles = profile_all_students()
+    student_type_map = {p["student_id"]: p["primary_type"] for p in profiles}
+
+    type_node_scores = {}
+    for m_row in all_sk:
+        sid = m_row["student_id"]
+        t = student_type_map.get(sid)
+        if not t:
+            continue
+        key = (t, m_row["node_id"])
+        if key not in type_node_scores:
+            type_node_scores[key] = []
+        type_node_scores[key].append(m_row["mastery_level"])
+
+    by_type = {}
+    for (t, node_id), scores in type_node_scores.items():
+        if t not in by_type:
+            by_type[t] = {}
+        by_type[t][node_id] = round(sum(scores) / len(scores), 3)
+
+    return {
+        "nodes": [dict(n) for n in nodes],
+        "edges": [dict(e) for e in edges],
+        "class_mastery": {m["node_id"]: dict(m) for m in mastery},
+        "by_type": by_type,
+        "type_labels": TYPE_LABELS,
+        "type_colors": TYPE_COLORS,
+    }
+
+
+@app.get("/api/knowledge-node/{node_id}/students")
+async def knowledge_node_students(node_id: str):
+    conn = get_db()
+    rows = conn.execute("""
+        SELECT sk.mastery_level, sk.evidence_source,
+               s.student_id, s.first_name, s.last_name
+        FROM student_knowledge sk
+        JOIN students s ON s.student_id = sk.student_id
+        WHERE sk.node_id = ?
+        ORDER BY sk.mastery_level ASC
+    """, (node_id,)).fetchall()
+    conn.close()
+    return {"students": [dict(r) for r in rows]}
+
+
+@app.get("/api/knowledge-by-type")
+async def knowledge_by_type():
+    profiles = profile_all_students()
+    conn = get_db()
+    nodes = conn.execute("SELECT * FROM knowledge_nodes").fetchall()
+    all_mastery = conn.execute("SELECT * FROM student_knowledge").fetchall()
+    conn.close()
+
+    student_type_map = {p["student_id"]: p["primary_type"] for p in profiles}
+
+    type_node_scores = {}
+    for m in all_mastery:
+        sid = m["student_id"]
+        t = student_type_map.get(sid)
+        if not t:
+            continue
+        key = (t, m["node_id"])
+        if key not in type_node_scores:
+            type_node_scores[key] = []
+        type_node_scores[key].append(m["mastery_level"])
+
+    result = {}
+    for (t, node_id), scores in type_node_scores.items():
+        if t not in result:
+            result[t] = {}
+        result[t][node_id] = round(sum(scores) / len(scores), 3)
+
+    return {
+        "nodes": [dict(n) for n in nodes],
+        "by_type": result,
+        "type_labels": TYPE_LABELS,
+        "type_colors": TYPE_COLORS,
+    }
+
+
+@app.get("/api/student/{student_id}/knowledge")
+async def student_knowledge(student_id: str):
+    conn = get_db()
+    student = conn.execute(
+        "SELECT * FROM students WHERE student_id=?", (student_id,)
+    ).fetchone()
+    if not student:
+        return JSONResponse(status_code=404, content={"error": "Student not found"})
+
+    nodes = conn.execute("SELECT * FROM knowledge_nodes").fetchall()
+    edges = conn.execute("SELECT * FROM knowledge_edges").fetchall()
+    mastery = conn.execute(
+        "SELECT * FROM student_knowledge WHERE student_id=?", (student_id,)
+    ).fetchall()
+    conn.close()
+
+    mastery_map = {m["node_id"]: dict(m) for m in mastery}
+
+    return {
+        "student_id": student_id,
+        "first_name": student["first_name"],
+        "last_name": student["last_name"],
+        "nodes": [dict(n) for n in nodes],
+        "edges": [dict(e) for e in edges],
+        "mastery": mastery_map,
+    }

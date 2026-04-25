@@ -281,6 +281,83 @@ def insert_dict(conn, table, data):
     conn.execute(f"INSERT INTO {table} ({cols}) VALUES ({placeholders})", list(data.values()))
 
 
+KNOWLEDGE_NODES = [
+    # Reading skills
+    ("r-decode", "Decoding & Fluency", "reading", 5),
+    ("r-vocab", "Vocabulary in Context", "reading", 5),
+    ("r-literal", "Literal Comprehension", "reading", 5),
+    ("r-inference", "Inferential Comprehension", "reading", 6),
+    ("r-main-idea", "Main Idea & Theme", "reading", 6),
+    ("r-text-structure", "Text Structure Analysis", "reading", 6),
+    ("r-cross-text", "Cross-Text Comparison", "reading", 6),
+    # Writing skills
+    ("w-conventions", "Writing Conventions", "writing", 5),
+    ("w-organization", "Essay Organization", "writing", 5),
+    ("w-evidence", "Using Evidence", "writing", 6),
+    ("w-elaboration", "Elaboration & Reasoning", "writing", 6),
+    ("w-counterargument", "Counterargument", "writing", 6),
+    ("w-revision", "Revision Strategy", "writing", 6),
+    # Higher-order
+    ("h-synthesis", "Synthesis Across Sources", "thinking", 6),
+    ("h-argumentation", "Argumentation", "thinking", 6),
+]
+
+KNOWLEDGE_EDGES = [
+    ("r-decode", "r-literal", "prerequisite"),
+    ("r-decode", "r-vocab", "prerequisite"),
+    ("r-literal", "r-inference", "prerequisite"),
+    ("r-vocab", "r-inference", "prerequisite"),
+    ("r-inference", "r-main-idea", "prerequisite"),
+    ("r-inference", "r-cross-text", "prerequisite"),
+    ("r-main-idea", "r-text-structure", "prerequisite"),
+    ("w-conventions", "w-organization", "prerequisite"),
+    ("w-organization", "w-evidence", "prerequisite"),
+    ("w-evidence", "w-elaboration", "prerequisite"),
+    ("w-evidence", "w-counterargument", "prerequisite"),
+    ("w-elaboration", "w-revision", "related"),
+    ("r-cross-text", "h-synthesis", "prerequisite"),
+    ("w-evidence", "h-synthesis", "prerequisite"),
+    ("w-elaboration", "h-argumentation", "prerequisite"),
+    ("w-counterargument", "h-argumentation", "prerequisite"),
+    ("h-synthesis", "h-argumentation", "related"),
+]
+
+NODE_SCORE_DRIVERS = {
+    "r-decode": lambda d, s, e: min(1.0, d / 10 * 1.2),
+    "r-vocab": lambda d, s, e: min(1.0, d / 10 * 1.1),
+    "r-literal": lambda d, s, e: min(1.0, (d + 1) / 10),
+    "r-inference": lambda d, s, e: min(1.0, d / 10 * 0.9),
+    "r-main-idea": lambda d, s, e: min(1.0, (d * 0.6 + s * 0.4) / 10),
+    "r-text-structure": lambda d, s, e: min(1.0, s / 10),
+    "r-cross-text": lambda d, s, e: min(1.0, (d * 0.5 + e * 0.5) / 10),
+    "w-conventions": lambda d, s, e: min(1.0, 0.5 + random.uniform(0, 0.3)),
+    "w-organization": lambda d, s, e: min(1.0, s / 10 * 1.1),
+    "w-evidence": lambda d, s, e: min(1.0, e / 10),
+    "w-elaboration": lambda d, s, e: min(1.0, d / 10 * 0.85),
+    "w-counterargument": lambda d, s, e: min(1.0, e / 10 * 0.8),
+    "w-revision": lambda d, s, e: min(1.0, (s * 0.6 + d * 0.4) / 10),
+    "h-synthesis": lambda d, s, e: min(1.0, (d * 0.4 + e * 0.3 + s * 0.3) / 10),
+    "h-argumentation": lambda d, s, e: min(1.0, (d * 0.5 + e * 0.3 + s * 0.2) / 10),
+}
+
+
+def generate_student_knowledge(student_id, depth_base, structure_base, evidence_base):
+    rows = []
+    for node_id, _, _, _ in KNOWLEDGE_NODES:
+        driver = NODE_SCORE_DRIVERS[node_id]
+        mastery = driver(depth_base, structure_base, evidence_base)
+        mastery = round(max(0.0, min(1.0, mastery + random.uniform(-0.08, 0.08))), 2)
+        source = "orf" if node_id.startswith("r-") else ("essay" if node_id.startswith("w-") else "composite")
+        rows.append({
+            "student_id": student_id,
+            "node_id": node_id,
+            "mastery_level": mastery,
+            "evidence_source": source,
+            "updated_at": datetime(2026, 3, 15).isoformat(),
+        })
+    return rows
+
+
 def seed():
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
@@ -299,6 +376,15 @@ def seed():
 
     for unit_id, name, grade, seq in UNITS:
         insert_dict(conn, "units", {"unit_id": unit_id, "name": name, "grade": grade, "sequence": seq})
+
+    for node_id, label, domain, grade in KNOWLEDGE_NODES:
+        insert_dict(conn, "knowledge_nodes", {
+            "node_id": node_id, "label": label, "domain": domain, "grade_level": grade,
+        })
+    for parent_id, child_id, relation in KNOWLEDGE_EDGES:
+        insert_dict(conn, "knowledge_edges", {
+            "parent_id": parent_id, "child_id": child_id, "relation": relation,
+        })
 
     for i, (first, last, unit_scores) in enumerate(STUDENT_PROFILES):
         student_id = f"s-{i+1:03d}"
@@ -331,11 +417,16 @@ def seed():
                 insert_dict(conn, "awe_scores", awe)
                 insert_dict(conn, "essay_signals", signals)
 
+        last_depth, last_struct, last_evid = unit_scores[-1]
+        for kn in generate_student_knowledge(student_id, last_depth, last_struct, last_evid):
+            insert_dict(conn, "student_knowledge", kn)
+
     conn.commit()
 
     # Print summary
     cursor = conn.cursor()
-    for table in ["students", "orf_sessions", "maze_sessions", "essays", "awe_scores", "essay_signals"]:
+    for table in ["students", "orf_sessions", "maze_sessions", "essays", "awe_scores", "essay_signals",
+                   "knowledge_nodes", "knowledge_edges", "student_knowledge"]:
         count = cursor.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
         print(f"  {table}: {count} rows")
 
